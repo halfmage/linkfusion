@@ -1,0 +1,5 @@
+node_modules/
+dist/
+
+netlify/functions/linkfusion/**
+!netlify/functions/linkfusion/index.js

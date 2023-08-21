@@ -1,0 +1,20 @@
+<form id="addLinkForm">
+    <label for="linkTitle">Link Title:</label>
+    <input type="text" id="linkTitle" name="title" required>
+    
+    <label for="linkUrl">Link URL:</label>
+    <input type="url" id="linkUrl" name="url" required>
+    
+    <button type="submit">Add Link</button>
+  </form>
+  
+
+<ul>
+    {% for link in linksCollection %}
+      <li>
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <script src="add-link.js"></script>
