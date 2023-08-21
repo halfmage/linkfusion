@@ -1,11 +1,12 @@
 
 
 <h1>Links Collection</h1>
-<ul>
-  {% for link in links %}
-    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-  {% endfor %}
-</ul>
+
+<ul id="linksList">
+    {% for link in links %}
+      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>  
 
 <form id="addLinkForm">
   <label for="linkTitle">Link Title:</label>
@@ -18,32 +19,44 @@
 </form>
 
 <script>
-  const form = document.getElementById('addLinkForm');
+// add-link.js
+const form = document.getElementById('addLinkForm');
+const linksList = document.getElementById('linksList'); // Add this line
 
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-    const formData = new FormData(form);
-    const title = formData.get('title');
-    const url = formData.get('url');
+  const formData = new FormData(form);
+  const title = formData.get('title');
+  const url = formData.get('url');
 
-    try {
-      const response = await fetch('/.netlify/functions/manage-links', {
-        method: 'POST',
-        body: JSON.stringify({ title, url }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        alert('Link added successfully');
-        window.location.reload(); // Refresh the page to show the updated links
-      } else {
-        alert('Error adding link');
+  try {
+    const response = await fetch('/.netlify/functions/manage-links', {
+      method: 'POST',
+      body: JSON.stringify({ title, url }),
+      headers: {
+        'Content-Type': 'application/json'
       }
-    } catch (error) {
-      console.error('Error:', error);
+    });
+
+    if (response.ok) {
+      alert('Link added successfully');
+      // Fetch updated list of links and update the content
+      const linksResponse = await fetch('/.netlify/functions/manage-links');
+      const linksData = await linksResponse.json();
+      updateLinksList(linksData); // Add this function call
+    } else {
+      alert('Error adding link');
     }
-  });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+// Function to update the links list content
+function updateLinksList(linksData) {
+  const linksHTML = linksData.map(link => `<li><a href="${link.url}">${link.title}</a></li>`).join('');
+  linksList.innerHTML = linksHTML;
+}
+
 </script>
