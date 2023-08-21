@@ -21,7 +21,7 @@
 <script>
 // add-link.js
 const form = document.getElementById('addLinkForm');
-const linksList = document.getElementById('linksList'); // Add this line
+const linksList = document.getElementById('linksList');
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -44,7 +44,7 @@ form.addEventListener('submit', async (event) => {
       // Fetch updated list of links and update the content
       const linksResponse = await fetch('/.netlify/functions/manage-links');
       const linksData = await linksResponse.json();
-      updateLinksList(linksData); // Add this function call
+      updateLinksList(linksData);
     } else {
       alert('Error adding link');
     }
